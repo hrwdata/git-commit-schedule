@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+if command -v git-commit-schedule >/dev/null 2>&1; then
+  exec git-commit-schedule _hook-pre-push "$@"
+fi
+
+if command -v py >/dev/null 2>&1; then
+  exec py -3 -m git_commit_schedule.cli _hook-pre-push "$@"
+fi
+
+exec python -m git_commit_schedule.cli _hook-pre-push "$@"
