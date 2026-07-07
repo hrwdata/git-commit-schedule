@@ -92,6 +92,11 @@ def remote_exists(name: str) -> bool:
     return run_git(["remote", "get-url", name], check=False).returncode == 0
 
 
+def has_any_remote() -> bool:
+    result = run_git(["remote"], check=False)
+    return bool(result.stdout.strip())
+
+
 def resolve_push_target(remote: str | None, branch: str | None) -> tuple[str, str]:
     resolved_branch = branch or current_branch()
     if not resolved_branch:
@@ -142,6 +147,8 @@ def unpublished_commits() -> list[str]:
     upstream = upstream_ref()
     if upstream:
         output = git_stdout(["rev-list", f"{upstream}..HEAD"])
+    elif not has_any_remote():
+        output = git_stdout(["rev-list", "HEAD"])
     else:
         output = git_stdout(["rev-list", "HEAD", "--not", "--remotes"])
     commits = [line.strip() for line in output.splitlines() if line.strip()]
@@ -154,6 +161,8 @@ def commits_for_push(local_oid: str, remote_oid: str) -> list[str]:
         return []
     if remote_oid and remote_oid != ZERO_OID:
         output = git_stdout(["rev-list", f"{remote_oid}..{local_oid}"])
+    elif not has_any_remote():
+        output = git_stdout(["rev-list", local_oid])
     else:
         output = git_stdout(["rev-list", local_oid, "--not", "--remotes"])
     commits = [line.strip() for line in output.splitlines() if line.strip()]
