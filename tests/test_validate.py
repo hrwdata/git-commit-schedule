@@ -13,6 +13,7 @@ def test_validate_reports_commit_outside_window(repo) -> None:
     env = {
         "GIT_AUTHOR_DATE": "2026-07-06 12:00:00 -0500",
         "GIT_COMMITTER_DATE": "2026-07-06 12:00:00 -0500",
+        "GIT_COMMIT_SCHEDULE_POST_COMMIT": "1",
     }
     run_git(
         repo,
@@ -32,6 +33,7 @@ def test_validate_reports_commit_outside_window_without_any_remote(repo) -> None
     env = {
         "GIT_AUTHOR_DATE": "2026-07-06 12:00:00 -0500",
         "GIT_COMMITTER_DATE": "2026-07-06 12:00:00 -0500",
+        "GIT_COMMIT_SCHEDULE_POST_COMMIT": "1",
     }
     run_git(
         repo,
