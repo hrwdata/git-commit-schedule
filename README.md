@@ -105,6 +105,11 @@ GitHub integration is opt-in and only triggers real actions after a successful p
 - Workflow timing depends on when a real trigger or `gh workflow run` occurs.
 - The tool does not alter GitHub server-side push, pull request, review, merge, issue, or workflow event timestamps after the fact.
 - The tool does not auto-force-push rewritten history.
+- Merge commits are not rewritten by the fallback hook unless explicitly enabled.
+- Signed commits are not rewritten by the fallback hook unless explicitly enabled.
+- Rebases and amends mark local rewrite state dirty until validation or reset.
+- Task Scheduler behavior after sleep or wake depends on host configuration.
+- Scheduling here means commit metadata scheduling plus optional real push scheduling, not delayed local patch queues.
 
 ## Validation
 
@@ -119,15 +124,9 @@ git log -n 20 --pretty=fuller --date=iso-local
 git-commit-schedule validate --online
 ```
 
-## Known Limits
-
-- merge commits are not rewritten by the fallback hook unless explicitly enabled;
-- signed commits are not rewritten by the fallback hook unless explicitly enabled;
-- rebases and amends mark local rewrite state dirty until validation or reset;
-- Task Scheduler behavior after sleep/wake depends on host configuration;
-- scheduling here means commit metadata scheduling plus optional real push scheduling, not delayed local patch queues.
 
 ## Documentation
 
 - [docs/behavior-boundaries.md](docs/behavior-boundaries.md)
 - [docs/windows-scheduler.md](docs/windows-scheduler.md)
+
